@@ -9,7 +9,7 @@ Azure Virtual networks provide the following key netowrking capabilities
 - Internet communications
 - Communicate between Azure resources
 - Communicate with on-premises resources
--Route network traffic
+- Route network traffic
 - Filter network traffic
 - Connect virtual networks
 
@@ -54,7 +54,31 @@ Azure virtual networks enable you to filter traffic between subnets by using the
 
 You can link VNETs together by using virtual network peering. Peering enables resources in each virtual network to communicate with each other. These virtual networks can be in separate regions, which allows you to create a global interconnected network through Azure.
 
+- Key Capabilities:
+
+  - Provides connectivity over private IP
+  - Supports cross-subscription and crosss-region connectivity
+
+- Limitations
+
+  - Address space cannot overlap
+  - Does not support transitive routing
+
 UDR is user-defined Routing. UDR is a significant update tto Azure's Virtual Networks as this allows network admins to control the routing tables between subnets within a VNet. as well as betwen VNets, therby allowing for greater control over network traffic flow.
+
+### Advanced Configuration
+
+#### Allow Forwarded traffic
+
+Allows forwarded traffic to pass through the VNET peer. A Network device is required such as Azure Firewall.
+
+#### Allow Gateway Transit and Use Remote Gateway
+
+Gateway Transit allows a VNet to be used to access other resources through a VNet gateway.
+Remote Gateway configures a VNet to make use of a peered VNet's gateway, to access other resources.
+
+Commonly used for on-premises networks.
+In the diagram below VNet A and VNet B are known as Spoke VNets, you configure *Use Remote Gateway* to get access to on-premises resources. And in the Hub VNet you configure *Allow Gateway Transit*
 
 ![azure-vnets](img/azure-vnets.png)
 
@@ -132,3 +156,28 @@ Key Features
 - Point-to-point Ethernet connection Point-to-point connections provide Layer 2 and Layer 3 connectivity between your on-premises site and Azure. You can connect your offices or datacenters to Azure by using the point-to-point links. For example, if you have an on-premises datacenter, you can use a point-to-point Ethernet link to connect to Microsoft
 - Any-to-any connection With any-to-any connectivity, you can integrate your wide area network (WAN) with Azure by providing connections to your offices and datacenters. Azure integrates with your WAN connection to provide a connection like you would have between your datacenter and any branch offices.
 With any-to-any connections, all WAN providers offer Layer 3 connectivity. For example, if you already use Multiprotocol Label Switching to connect to your branch offices or other sites in your organization, an ExpressRoute connection to Microsoft behaves like any other location on your private WAN.
+
+## Service Endpoints
+
+- **Private connectivity for Services** (allowing access to Azure services within your VNet)
+- **Optimized Backbone Routing** (traffic flows over Microsoft backbone)
+- **Block Public Accessibility** (when service endpoints are combined with service firewalls, you can remove public accessibility)
+
+## Private Link
+
+- **Private Addressing for Services** provide private IP addressing within a virtual netwok to access supported services by.
+
+- **Optimized Backbone Routing** ensure traffic between resources in your virtual network and connected services only traverses the secure Microsoft backbone.
+
+- **Extended Accessibility** Connectivity to services whether they are located.
+
+### Key Components
+
+- Private Endpoint
+  - The network interface that connects to a suppported service
+  - Receives a private IP address from the registered subnet
+  - Configured with DNS
+- Connected Resource
+  - The scoped Azure PaaS resource associated with a Private link
+- Private Link Sevice
+  - Customer-managed service operating behind a standard load balancer, enabled for Private Link accessibility.
